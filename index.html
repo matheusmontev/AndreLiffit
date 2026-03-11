@@ -125,8 +125,115 @@
             transition: opacity 0.3s;
         }
 
-        .error-message.visible {
+
+        /* Painel Admin */
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 600px;
+            z-index: 1000;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .admin-panel.visible {
+            display: block;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-table th, .admin-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .btn-admin-close {
+            background: #e2e8f0;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-add {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .btn-remove {
+            background: #f56565;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-export {
+            background: #4a5568;
+            color: white;
+            border: none;
+            padding: 0.85rem;
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .export-area {
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .export-area textarea {
+            width: 100%;
+            height: 150px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        /* Botão discreto para admin */
+        .admin-trigger {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            opacity: 0.1;
+            cursor: default;
+            font-size: 0.7rem;
+        }
+
+        .admin-trigger:hover {
             opacity: 1;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -153,76 +260,84 @@
             <button type="submit" class="btn-login">Entrar</button>
         </form>
 
+
         <div id="msgErro" class="error-message">Usuário ou senha incorretos.</div>
+
+        <div class="admin-trigger" onclick="toggleAdmin()">Config</div>
     </div>
 
+    <!-- Painel de Gerenciamento -->
+    <div id="adminPanel" class="admin-panel">
+        <div class="admin-header">
+            <h3>Gerenciar Usuários</h3>
+            <button class="btn-admin-close" onclick="toggleAdmin()">Fechar</button>
+        </div>
+
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Usuário</th>
+                    <th>Senha</th>
+                    <th>Link</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody">
+                <!-- Preenchido via JS -->
+            </tbody>
+        </table>
+
+        <h4>Adicionar Novo</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem;">
+            <input type="text" id="newUsername" placeholder="Usuário" class="input-group input" style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="text" id="newPassword" placeholder="Senha" class="input-group input" style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+        <input type="text" id="newLink" placeholder="Link de Redirecionamento" class="input-group input" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 1rem;">
+        <button class="btn-add" onclick="addUser()">+ Adicionar Usuário</button>
+
+        <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid #eee;">
+
+        <button class="btn-export" onclick="exportCode()">💾 Gerar Código para Salvar</button>
+        
+        <div id="exportArea" class="export-area">
+            <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.5rem;">Copia o código abaixo e cola dentro do arquivo <strong>js/usuarios.js</strong>:</p>
+            <textarea id="exportTextarea" readonly></textarea>
+            <button class="btn-login" onclick="copyCode()" style="background: #2d3748;">Copiar Código</button>
+        </div>
+    </div>
+
+    <script src="js/usuarios.js"></script>
     <script>
         /**
          * LÓGICA (JavaScript)
-         * Requisito Principal: Sistema com MÚLTIPLOS USUÁRIOS.
+         * Sistema com MÚLTIPLOS USUÁRIOS v2.0
          */
-
-        // =================================================================
-        // LISTA DE USUÁRIOS - ADICIONE OU REMOVA USUÁRIOS AQUI
-        // =================================================================
-        // Cada objeto deve ter: { usuario: "...", senha: "...", link_de_redirecionamento: "..." }
-        const LISTA_DE_USUARIOS = [
-            {
-                usuario: "admin",
-                senha: "123",
-                link_de_redirecionamento: "https://google.com" // Exemplo: Dashboard Admin
-            },
-            {
-                usuario: "ELOISA",
-                senha: "131427",
-                link_de_redirecionamento: "https://andreliffit.my.canva.site/andre" // Exemplo: Área do Cliente
-            },
-            {
-                usuario: "visitante",
-                senha: "000",
-                link_de_redirecionamento: "https://example.com" // Exemplo: Página de Boas-vindas
-            },
-            {
-                usuario: "matheus",
-                senha: "123",
-                link_de_redirecionamento: "https://www.instagram.com/matheusmontev/" // Exemplo: Dashboard Admin
-            },
-            // Adicione novos usuários copiando o bloco acima e colando aqui
-        ];
-        // =================================================================
 
         const loginForm = document.getElementById('loginForm');
         const msgErro = document.getElementById('msgErro');
 
         loginForm.addEventListener('submit', function (event) {
-            event.preventDefault(); // Impede o recarregamento da página
+            event.preventDefault();
 
-            // Captura os valores dos inputs
             const usuarioInput = document.getElementById('usuario').value.trim();
             const senhaInput = document.getElementById('senha').value.trim();
 
             let usuarioEncontrado = false;
 
-            // Varre a lista de usuários
+            // Varre a lista de usuários carregada do js/usuarios.js
             for (let i = 0; i < LISTA_DE_USUARIOS.length; i++) {
                 const u = LISTA_DE_USUARIOS[i];
 
-                // Verifica se usuário e senha batem
                 if (u.usuario === usuarioInput && u.senha === senhaInput) {
                     usuarioEncontrado = true;
-
-                    // Redireciona para o link específico
                     console.log(`Login com sucesso! Redirecionando ${u.usuario} para ${u.link_de_redirecionamento}`);
                     window.location.href = u.link_de_redirecionamento;
-                    break; // Para o loop pois já encontrou
+                    break;
                 }
             }
 
-            // Se não encontrou ninguém
             if (!usuarioEncontrado) {
                 msgErro.classList.add('visible');
-
-                // Opcional: Treme o card ou limpa a senha
                 document.getElementById('senha').value = '';
                 document.getElementById('senha').focus();
             } else {
@@ -230,9 +345,83 @@
             }
         });
 
+
         // Limpa erro ao digitar novamente
         document.getElementById('usuario').addEventListener('input', () => msgErro.classList.remove('visible'));
         document.getElementById('senha').addEventListener('input', () => msgErro.classList.remove('visible'));
+
+        // FUNÇÕES ADMIN
+        function toggleAdmin() {
+            const panel = document.getElementById('adminPanel');
+            panel.classList.toggle('visible');
+            if (panel.classList.contains('visible')) {
+                renderTable();
+            }
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('userTableBody');
+            tbody.innerHTML = '';
+            LISTA_DE_USUARIOS.forEach((u, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${u.usuario}</td>
+                    <td>${u.senha}</td>
+                    <td title="${u.link_de_redirecionamento}">${u.link_de_redirecionamento.substring(0, 20)}...</td>
+                    <td><button class="btn-remove" onclick="removeUser(${index})">X</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function addUser() {
+            const user = document.getElementById('newUsername').value.trim();
+            const pass = document.getElementById('newPassword').value.trim();
+            const link = document.getElementById('newLink').value.trim();
+
+            if (user && pass && link) {
+                LISTA_DE_USUARIOS.push({
+                    usuario: user,
+                    senha: pass,
+                    link_de_redirecionamento: link
+                });
+                renderTable();
+                // Limpa campos
+                document.getElementById('newUsername').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('newLink').value = '';
+            } else {
+                alert('Preencha todos os campos!');
+            }
+        }
+
+        function removeUser(index) {
+            if (confirm('Tem certeza que deseja remover este usuário?')) {
+                LISTA_DE_USUARIOS.splice(index, 1);
+                renderTable();
+            }
+        }
+
+        function exportCode() {
+            const area = document.getElementById('exportArea');
+            const textarea = document.getElementById('exportTextarea');
+            
+            const code = `/**
+ * LISTA DE USUÁRIOS - Gerado automaticamente
+ */
+const LISTA_DE_USUARIOS = ${JSON.stringify(LISTA_DE_USUARIOS, null, 4)};`;
+            
+            textarea.value = code;
+            area.style.display = 'block';
+            textarea.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copyCode() {
+            const textarea = document.getElementById('exportTextarea');
+            textarea.select();
+            document.execCommand('copy');
+            alert('Código copiado! Agora cole no arquivo js/usuarios.js e salve.');
+        }
 
     </script>
 </body>
