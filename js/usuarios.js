@@ -21,5 +21,10 @@ const LISTA_DE_USUARIOS = [
         "usuario": "matheus",
         "senha": "123",
         "link_de_redirecionamento": "https://www.instagram.com/matheusmontev/"
+    },
+    {
+        "usuario": "123",
+        "senha": "123",
+        "link_de_redirecionamento": "https://github.com/matheusmontev/saas-de-treino-Andr-"
     }
 ];
