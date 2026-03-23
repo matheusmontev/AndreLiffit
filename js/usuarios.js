@@ -1,5 +1,15 @@
 /**
- * LISTA DE USUÁRIOS - Gerado automaticamente
+ * ==========================================
+ * LISTA DE USUÁRIOS
+ * ==========================================
+ * COMO ATUALIZAR ESTE ARQUIVO:
+ * 1. Acesse o Painel de Gerenciamento (admin.html).
+ * 2. Adicione ou remova os usuários através da interface visual.
+ * 3. Clique em "Gerar Código Atualizado".
+ * 4. Copie o bloco de código gerado.
+ * 5. Cole substituindo TODO o conteúdo deste arquivo.
+ * 6. Salve o arquivo e recarregue a página de login.
+ * ==========================================
  */
 const LISTA_DE_USUARIOS = [
     {

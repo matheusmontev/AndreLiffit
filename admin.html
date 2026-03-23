@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Usuários</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            color: #333;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            color: #1a202c;
+            font-size: 1.8rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: #4299e1;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3182ce;
+        }
+
+        .btn-danger {
+            background-color: #e53e3e;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c53030;
+        }
+
+        .btn-success {
+            background-color: #48bb78;
+            color: white;
+            margin-top: 1rem;
+        }
+
+        .btn-success:hover {
+            background-color: #38a169;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid #a0aec0;
+            color: #4a5568;
+        }
+
+        .btn-outline:hover {
+            background-color: #edf2f7;
+            border-color: #718096;
+            color: #2d3748;
+        }
+
+        /* Card panels */
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #2d3748;
+            border-bottom: 2px solid #edf2f7;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Form styling */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 2fr auto;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 0.85rem;
+            color: #4a5568;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            padding: 0.6rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus {
+            border-color: #4299e1;
+        }
+
+        /* Table */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        th {
+            background-color: #f7fafc;
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        td {
+            color: #2d3748;
+            font-size: 0.95rem;
+        }
+
+        tr:hover td {
+            background-color: #f7fafc;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Generated code box */
+        .code-container {
+            display: none;
+            margin-top: 1.5rem;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .code-container.visible {
+            display: block;
+        }
+
+        .code-header {
+            background: #edf2f7;
+            padding: 0.8rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #cbd5e0;
+        }
+        
+        .code-header span {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 0.9rem;
+        }
+
+        pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #48bb78;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+    </style>
+    <!-- Importar a lista atual para carregar na tela -->
+    <script src="js/usuarios.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Gerenciamento de Usuários</h1>
+            <a href="index.html" class="btn btn-outline">Voltar para o Login</a>
+        </div>
+
+        <div class="card">
+            <h2>Adicionar Novo Usuário</h2>
+            <form id="formUsuario" class="form-grid">
+                <div class="input-group">
+                    <label for="nome">Usuário</label>
+                    <input type="text" id="nome" placeholder="Ex: Maria" required>
+                </div>
+                <div class="input-group">
+                    <label for="senha">Senha</label>
+                    <input type="text" id="senha" placeholder="Ex: senha123" required>
+                </div>
+                <div class="input-group">
+                    <label for="link">Link de Redirecionamento</label>
+                    <input type="url" id="link" placeholder="Ex: https://meulink.com" required>
+                </div>
+                <div class="input-group" style="justify-content: flex-end;">
+                    <button type="submit" class="btn btn-primary" style="height: 40px;">Adicionar</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Usuários Cadastrados</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Usuário</th>
+                            <th>Senha</th>
+                            <th>Link de Redirecionamento</th>
+                            <th style="width: 100px;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaUsuarios">
+                        <!-- Usuários renderizados aqui via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <button id="btnGerar" class="btn btn-success">Gerar Código Atualizado</button>
+
+            <div id="codeContainer" class="code-container">
+                <div class="code-header">
+                    <span>Copie o código abaixo e cole no arquivo: <strong>js/usuarios.js</strong></span>
+                    <button id="btnCopiar" class="btn btn-primary" style="padding: 0.4rem 0.8rem;">Copiar Código</button>
+                </div>
+                <pre id="codigoGerado"></pre>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Ação realizada com sucesso!</div>
+
+    <script>
+        // Uma cópia local da lista do arquivo usuarios.js para podermos modificar na interface
+        let usuariosLocais = [];
+        
+        // Verifica se LISTA_DE_USUARIOS foi importada corretamente
+        if (typeof LISTA_DE_USUARIOS !== 'undefined') {
+            // Copia estruturada para não mutar a referência original diretamente
+            usuariosLocais = JSON.parse(JSON.stringify(LISTA_DE_USUARIOS));
+        } else {
+            console.error("Não foi possível carregar js/usuarios.js");
+        }
+
+        const tabelaUsuarios = document.getElementById('tabelaUsuarios');
+        const formUsuario = document.getElementById('formUsuario');
+        const btnGerar = document.getElementById('btnGerar');
+        const codeContainer = document.getElementById('codeContainer');
+        const codigoGerado = document.getElementById('codigoGerado');
+        const btnCopiar = document.getElementById('btnCopiar');
+        const toast = document.getElementById('toast');
+
+        // Função para mostrar notificação
+        function showToast(mensagem) {
+            toast.textContent = mensagem;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Função para renderizar a tabela
+        function renderizarTabela() {
+            tabelaUsuarios.innerHTML = '';
+            
+            if (usuariosLocais.length === 0) {
+                tabelaUsuarios.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#718096;">Nenhum usuário cadastrado.</td></tr>';
+                return;
+            }
+
+            usuariosLocais.forEach((u, index) => {
+                const tr = document.createElement('tr');
+                
+                tr.innerHTML = `
+                    <td><strong>${u.usuario}</strong></td>
+                    <td style="font-family: monospace;">${u.senha}</td>
+                    <td><a href="${u.link_de_redirecionamento}" target="_blank" style="color: #4299e1; text-decoration: none;">Link 🔗</a></td>
+                    <td>
+                        <button class="btn btn-danger" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;" onclick="removerUsuario(${index})">Remover</button>
+                    </td>
+                `;
+                
+                tabelaUsuarios.appendChild(tr);
+            });
+        }
+
+        // Adicionar novo usuário
+        formUsuario.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const usuario = document.getElementById('nome').value.trim();
+            const senha = document.getElementById('senha').value.trim();
+            const link_de_redirecionamento = document.getElementById('link').value.trim();
+
+            if (usuario && senha && link_de_redirecionamento) {
+                usuariosLocais.push({
+                    usuario,
+                    senha,
+                    link_de_redirecionamento
+                });
+                
+                // Limpar form
+                formUsuario.reset();
+                renderizarTabela();
+                showToast("Usuário adicionado! Lembre-se de gerar e copiar o código.");
+                
+                // Se o container de código estiver aberto, atualiza para evitar esquecimentos
+                if (codeContainer.classList.contains('visible')) {
+                    gerarCodigo();
+                }
+            }
+        });
+
+        // Remover usuário
+        window.removerUsuario = function(index) {
+            const tempUsuario = usuariosLocais[index].usuario;
+            if (confirm(`Tem certeza que deseja remover o usuário ${tempUsuario}?`)) {
+                usuariosLocais.splice(index, 1);
+                renderizarTabela();
+                showToast(`Usuário ${tempUsuario} removido!`);
+                
+                if (codeContainer.classList.contains('visible')) {
+                    gerarCodigo();
+                }
+            }
+        };
+
+        // Gerar código para o usuarios.js
+        function gerarCodigo() {
+            const cabecalho = `/**
+ * ==========================================
+ * LISTA DE USUÁRIOS
+ * ==========================================
+ * COMO ATUALIZAR ESTE ARQUIVO:
+ * 1. Acesse o Painel de Gerenciamento (admin.html).
+ * 2. Adicione ou remova os usuários através da interface visual.
+ * 3. Clique em "Gerar Código Atualizado".
+ * 4. Copie o bloco de código gerado.
+ * 5. Cole substituindo TODO o conteúdo deste arquivo.
+ * 6. Salve o arquivo e recarregue a página de login.
+ * ==========================================
+ */
+const LISTA_DE_USUARIOS = `;
+
+            const corpoArray = JSON.stringify(usuariosLocais, null, 4);
+            const rodape = `;\n`;
+
+            const codigoFinal = cabecalho + corpoArray + rodape;
+            codigoGerado.textContent = codigoFinal;
+            codeContainer.classList.add('visible');
+        }
+
+        btnGerar.addEventListener('click', () => {
+            gerarCodigo();
+            // Scroll suave até o bloco de código
+            setTimeout(() => {
+                codeContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 100);
+        });
+
+        // Copiar para área de transferência
+        btnCopiar.addEventListener('click', () => {
+            const texto = codigoGerado.textContent;
+            navigator.clipboard.writeText(texto).then(() => {
+                const textoOriginal = btnCopiar.textContent;
+                btnCopiar.textContent = "✔ Copiado!";
+                btnCopiar.style.backgroundColor = "#48bb78";
+                showToast("Código copiado! Cole dentro de js/usuarios.js");
+                
+                setTimeout(() => {
+                    btnCopiar.textContent = textoOriginal;
+                    btnCopiar.style.backgroundColor = "";
+                }, 3000);
+            }).catch(err => {
+                console.error("Erro ao copiar: ", err);
+                alert("Falha ao copiar o texto. Por favor, copie manualmente.");
+            });
+        });
+
+        // Inicializar tabela na primeira carga
+        renderizarTabela();
+    </script>
+</body>
+
+</html>

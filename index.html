@@ -128,7 +128,22 @@
         .error-message.visible {
             opacity: 1;
         }
+        .admin-link {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            opacity: 0.1;
+            color: #333;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: opacity 0.3s;
+        }
+
+        .admin-link:hover {
+            opacity: 0.8;
+        }
     </style>
+    <script src="js/usuarios.js"></script>
 </head>
 
 <body>
@@ -161,36 +176,6 @@
          * LÓGICA (JavaScript)
          * Requisito Principal: Sistema com MÚLTIPLOS USUÁRIOS.
          */
-
-        // =================================================================
-        // LISTA DE USUÁRIOS - ADICIONE OU REMOVA USUÁRIOS AQUI
-        // =================================================================
-        // Cada objeto deve ter: { usuario: "...", senha: "...", link_de_redirecionamento: "..." }
-        const LISTA_DE_USUARIOS = [
-            {
-                usuario: "admin",
-                senha: "123",
-                link_de_redirecionamento: "https://google.com" // Exemplo: Dashboard Admin
-            },
-            {
-                usuario: "ELOISA",
-                senha: "131427",
-                link_de_redirecionamento: "https://andreliffit.my.canva.site/andre" // Exemplo: Área do Cliente
-            },
-            {
-                usuario: "visitante",
-                senha: "000",
-                link_de_redirecionamento: "https://example.com" // Exemplo: Página de Boas-vindas
-            },
-            {
-                usuario: "matheus",
-                senha: "123",
-                link_de_redirecionamento: "https://www.instagram.com/matheusmontev/" // Exemplo: Dashboard Admin
-            },
-            // Adicione novos usuários copiando o bloco acima e colando aqui
-        ];
-        // =================================================================
-
         const loginForm = document.getElementById('loginForm');
         const msgErro = document.getElementById('msgErro');
 
@@ -235,6 +220,7 @@
         document.getElementById('senha').addEventListener('input', () => msgErro.classList.remove('visible'));
 
     </script>
+    <a href="admin.html" class="admin-link" title="Painel de Gerenciamento">⚙️</a>
 </body>
 
 </html>
