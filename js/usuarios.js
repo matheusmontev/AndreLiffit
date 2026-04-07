@@ -13,18 +13,18 @@
  */
 const LISTA_DE_USUARIOS = [
     {
-        usuario: "ELOISA",
-        senha: "131427",
-        link_de_redirecionamento: "https://andreliffit.my.canva.site/andre"
+        "usuario": "ELOISA",
+        "senha": "131427",
+        "link_de_redirecionamento": "https://andreliffit.my.canva.site/andre"
     },
     {
-        usuario: "maycon",
-        senha: "12345",
-        link_de_redirecionamento: "https://andreliffit.my.canva.site/maycon"
+        "usuario": "maycon",
+        "senha": "12345",
+        "link_de_redirecionamento": "https://andreliffit.my.canva.site/maycon"
     },
     {
-        usuario: "Diego Moreira",
-        senha: "74981446454",
-        link_de_redirecionamento: "https://andreliffit.my.canva.site/diego-moreira-sousa"
+        "usuario": "Diego Moreira",
+        "senha": "74981446454",
+        "link_de_redirecionamento": "https://andreliffit.my.canva.site/diego-moreira-sousa"
     }
 ];
