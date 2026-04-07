@@ -26,5 +26,10 @@ const LISTA_DE_USUARIOS = [
         "usuario": "maycon",
         "senha": "12345",
         "link_de_redirecionamento": "https://andreliffit.my.canva.site/maycon"
+    },
+    {
+        "usuario": "Diego Moreira",
+        "senha": "74981446454",
+        "link_de_redirecionamento": "https://andreliffit.my.canva.site/diego-moreira-sousa"
     }
 ];
