@@ -11,26 +11,20 @@
  * 6. Salve o arquivo e recarregue a página de login.
  * ==========================================
  */
-function fazerLogin() {
-    const usuarioDigitado = document
-        .getElementById("usuario")
-        .value
-        .trim()
-        .toLowerCase();
-
-    const senhaDigitada = document
-        .getElementById("senha")
-        .value
-        .trim();
-
-    const usuarioEncontrado = LISTA_DE_USUARIOS.find(user =>
-        user.usuario.toLowerCase() === usuarioDigitado &&
-        user.senha === senhaDigitada
-    );
-
-    if (usuarioEncontrado) {
-        window.location.href = usuarioEncontrado.link_de_redirecionamento;
-    } else {
-        alert("Usuário ou senha incorretos!");
+const LISTA_DE_USUARIOS = [
+    {
+        usuario: "ELOISA",
+        senha: "131427",
+        link_de_redirecionamento: "https://andreliffit.my.canva.site/andre"
+    },
+    {
+        usuario: "maycon",
+        senha: "12345",
+        link_de_redirecionamento: "https://andreliffit.my.canva.site/maycon"
+    },
+    {
+        usuario: "Diego Moreira",
+        senha: "74981446454",
+        link_de_redirecionamento: "https://andreliffit.my.canva.site/diego-moreira-sousa"
     }
-}
+];
