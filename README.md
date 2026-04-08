@@ -30,15 +30,4 @@ O projeto foi construído seguindo as melhores práticas de desenvolvimento web 
 
 ---
 
-## 🚀 Como Executar
-
-Não é necessária nenhuma instalação complexa. Como o projeto utiliza tecnologias nativas, você pode rodá-lo diretamente no seu navegador.
-
-1.  **Clone o repositório** (ou baixe os arquivos):
-    ```bash
-    git clone https://github.com/matheusmontev/saas-de-treino-Andr-.git
-    ```
-
----
-
 Feito com 💙 para fins de estudo e aprimoramento em desenvolvimento web.
