@@ -26,5 +26,10 @@ const LISTA_DE_USUARIOS = [
         "usuario": "Diego Moreira",
         "senha": "74981446454",
         "link_de_redirecionamento": "https://andreliffit.my.canva.site/diego-moreira-sousa"
+    },
+    {
+        "usuario": "Leticia Aquino",
+        "senha": "73981945233",
+        "link_de_redirecionamento": "https://andreliffit.my.canva.site/let-cia-aquino"
     }
 ];
